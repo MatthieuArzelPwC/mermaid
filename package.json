@@ -1,0 +1,15 @@
+{
+  "name": "weweb-mermaid-diagram",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "serve": "weweb serve",
+    "build": "weweb build --name=mermaid-diagram --type=wwobject"
+  },
+  "dependencies": {
+    "mermaid": "11.17.2"
+  },
+  "devDependencies": {
+    "@weweb/cli": "3.8.16"
+  }
+}
