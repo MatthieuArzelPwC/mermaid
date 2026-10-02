@@ -23,6 +23,7 @@ export default {
       defaultValue: defaultDiagram,
       options: {
         placeholder: 'flowchart\n    A[Start] --> B[End]',
+        rows: 12,
       },
     },
     backgroundColor: {
