@@ -30,7 +30,7 @@ Dans WeWeb :
 La propriete accepte directement le contenu Mermaid :
 
 ```text
-flowchart LR
+flowchart
     A[Demande] --> B{Budget > 500k EUR ?}
     B -->|Oui| C[Comite Investissement]
     B -->|Non| D[Validation standard]
@@ -55,6 +55,8 @@ collection-item.mermaid_code
 ```
 
 Le diagramme est regenere automatiquement quand la valeur bindee change.
+
+L'option bindable `Gauche vers droite` controle l'orientation des flowcharts : activee pour `LR`, desactivee pour `TB`. Elle remplace toute direction eventuellement presente apres `flowchart` ou `graph` dans le code source.
 
 ## Securite et limites
 

@@ -1,4 +1,4 @@
-const defaultDiagram = `flowchart LR
+const defaultDiagram = `flowchart
     T1[Projet non technologique] --> C1[Investissement]
     C1 --> N1[Immobilier]
     N1 --> F1[[Comite Immobilier]]`;
@@ -22,30 +22,13 @@ export default {
       bindable: true,
       defaultValue: defaultDiagram,
       options: {
-        placeholder: 'flowchart LR\n    A[Start] --> B[End]',
-      },
-    },
-    theme: {
-      label: {
-        en: 'Theme',
-        fr: 'Theme',
-      },
-      section: 'style',
-      type: 'TextSelect',
-      defaultValue: 'default',
-      options: {
-        options: [
-          { value: 'default', label: { en: 'Default', fr: 'Par defaut' } },
-          { value: 'neutral', label: { en: 'Neutral', fr: 'Neutre' } },
-          { value: 'dark', label: { en: 'Dark', fr: 'Sombre' } },
-          { value: 'forest', label: { en: 'Forest', fr: 'Foret' } },
-        ],
+        placeholder: 'flowchart\n    A[Start] --> B[End]',
       },
     },
     backgroundColor: {
       label: {
-        en: 'Canvas color',
-        fr: 'Couleur du fond',
+        en: 'Background color',
+        fr: 'Couleur de fond',
       },
       section: 'style',
       type: 'Color',
@@ -54,27 +37,46 @@ export default {
         nullable: true,
       },
     },
-    minHeight: {
+    borderColor: {
       label: {
-        en: 'Minimum height',
-        fr: 'Hauteur minimale',
+        en: 'Border color',
+        fr: 'Couleur des bordures',
       },
       section: 'style',
-      type: 'Length',
-      defaultValue: '320px',
+      type: 'Color',
+      defaultValue: '#333333',
       options: {
-        unitChoices: [
-          { value: 'px', label: 'px', min: 0, max: 2000 },
-          { value: 'vh', label: 'vh', min: 0, max: 100 },
-        ],
+        nullable: true,
       },
+    },
+    textColor: {
+      label: {
+        en: 'Text color',
+        fr: 'Couleur du texte',
+      },
+      section: 'style',
+      type: 'Color',
+      defaultValue: '#333333',
+      options: {
+        nullable: true,
+      },
+    },
+    leftToRight: {
+      label: {
+        en: 'Left to right',
+        fr: 'Gauche vers droite',
+      },
+      section: 'settings',
+      type: 'OnOff',
+      bindable: true,
+      defaultValue: true,
     },
     centerDiagram: {
       label: {
         en: 'Center diagram',
         fr: 'Centrer le diagramme',
       },
-      section: 'style',
+      section: 'settings',
       type: 'OnOff',
       defaultValue: true,
     },

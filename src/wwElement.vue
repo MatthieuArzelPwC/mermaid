@@ -1,5 +1,5 @@
 <template>
-  <div class="mermaid-element" :style="rootStyle">
+  <div class="mermaid-element">
     <p v-if="errorMessage" class="mermaid-element__error" role="alert">
       {{ errorMessage }}
     </p>
@@ -28,6 +28,16 @@ function normalizeCode(value) {
     .trim();
 }
 
+function applyDirection(code, direction) {
+  if (!code) return '';
+
+  if (/^\s*(flowchart|graph)\b/i.test(code)) {
+    return code.replace(/^\s*(flowchart|graph)(?:\s+(?:TB|TD|BT|RL|LR))?\b/i, `$1 ${direction}`);
+  }
+
+  return code;
+}
+
 function errorText(error) {
   if (error instanceof Error && error.message) return error.message;
   return String(error || 'Erreur Mermaid inconnue');
@@ -46,20 +56,34 @@ export default {
   },
   computed: {
     diagramCode() {
-      return normalizeCode(this.content.code);
+      const direction = this.content.leftToRight === false ? 'TB' : 'LR';
+      return applyDirection(normalizeCode(this.content.code), direction);
     },
-    selectedTheme() {
-      const supportedThemes = ['default', 'neutral', 'dark', 'forest'];
-      return supportedThemes.includes(this.content.theme) ? this.content.theme : 'default';
+    diagramColors() {
+      const backgroundColor = this.content.backgroundColor || '#ffffff';
+      const borderColor = this.content.borderColor || '#333333';
+      const textColor = this.content.textColor || '#333333';
+
+      return {
+        primaryColor: backgroundColor,
+        primaryBorderColor: borderColor,
+        primaryTextColor: textColor,
+        secondaryColor: backgroundColor,
+        secondaryBorderColor: borderColor,
+        secondaryTextColor: textColor,
+        tertiaryColor: backgroundColor,
+        tertiaryBorderColor: borderColor,
+        tertiaryTextColor: textColor,
+        nodeBorder: borderColor,
+        clusterBkg: backgroundColor,
+        clusterBorder: borderColor,
+        titleColor: textColor,
+        edgeLabelBackground: backgroundColor,
+        textColor,
+      };
     },
     shouldCenter() {
       return this.content.centerDiagram !== false;
-    },
-    rootStyle() {
-      return {
-        backgroundColor: this.content.backgroundColor || 'transparent',
-        minHeight: this.content.minHeight || '0px',
-      };
     },
   },
   watch: {
@@ -69,8 +93,11 @@ export default {
         this.scheduleRender();
       },
     },
-    selectedTheme() {
-      this.scheduleRender();
+    diagramColors: {
+      deep: true,
+      handler() {
+        this.scheduleRender();
+      },
     },
   },
   beforeUnmount() {
@@ -93,7 +120,8 @@ export default {
         mermaid.initialize({
           startOnLoad: false,
           securityLevel: 'strict',
-          theme: this.selectedTheme,
+          theme: 'base',
+          themeVariables: this.diagramColors,
         });
 
         const id = `mermaid-${this.uid.replace(/[^a-zA-Z0-9_-]/g, '-')}-${++diagramSequence}`;
