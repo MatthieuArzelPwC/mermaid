@@ -28,16 +28,6 @@ function normalizeCode(value) {
     .trim();
 }
 
-function applyDirection(code, direction) {
-  if (!code) return '';
-
-  if (/^\s*(flowchart|graph)\b/i.test(code)) {
-    return code.replace(/^\s*(flowchart|graph)(?:\s+(?:TB|TD|BT|RL|LR))?\b/i, `$1 ${direction}`);
-  }
-
-  return code;
-}
-
 function errorText(error) {
   if (error instanceof Error && error.message) return error.message;
   return String(error || 'Erreur Mermaid inconnue');
@@ -56,14 +46,15 @@ export default {
   },
   computed: {
     diagramCode() {
-      const direction = this.content.leftToRight === false ? 'TB' : 'LR';
-      return applyDirection(normalizeCode(this.content.code), direction);
+      return normalizeCode(this.content.code);
     },
     diagramColors() {
       return {
         backgroundColor: this.content.backgroundColor || '#ffffff',
         borderColor: this.content.borderColor || '#333333',
         textColor: this.content.textColor || '#333333',
+        accentColor: this.content.accentColor || '#d04a02',
+        subgraphColor: this.content.subgraphColor || '#f4f4f4',
       };
     },
     shouldCenter() {
@@ -112,6 +103,8 @@ export default {
       const backgroundColor = this.resolveColor(this.diagramColors.backgroundColor, '#ffffff');
       const borderColor = this.resolveColor(this.diagramColors.borderColor, '#333333');
       const textColor = this.resolveColor(this.diagramColors.textColor, '#333333');
+      const accentColor = this.resolveColor(this.diagramColors.accentColor, '#d04a02');
+      const subgraphColor = this.resolveColor(this.diagramColors.subgraphColor, '#f4f4f4');
 
       return {
         primaryColor: backgroundColor,
@@ -124,9 +117,9 @@ export default {
         tertiaryBorderColor: borderColor,
         tertiaryTextColor: textColor,
         nodeBorder: borderColor,
-        clusterBkg: backgroundColor,
+        clusterBkg: subgraphColor,
         clusterBorder: borderColor,
-        titleColor: textColor,
+        titleColor: accentColor,
         edgeLabelBackground: backgroundColor,
         lineColor: textColor,
         textColor,

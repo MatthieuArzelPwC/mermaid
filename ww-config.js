@@ -1,4 +1,4 @@
-const defaultDiagram = `flowchart
+const defaultDiagram = `flowchart LR
     T1[Projet non technologique] --> C1[Investissement]
     C1 --> N1[Immobilier]
     N1 --> F1[[Comite Immobilier]]`;
@@ -18,12 +18,13 @@ export default {
         fr: 'Code Mermaid',
       },
       section: 'settings',
-      type: 'Textarea',
+      type: 'Text',
       bindable: true,
       defaultValue: defaultDiagram,
       options: {
-        placeholder: 'flowchart\n    A[Start] --> B[End]',
-        rows: 12,
+        code: true,
+        language: 'text',
+        placeholder: 'flowchart LR\n    A[Start] --> B[End]',
       },
     },
     backgroundColor: {
@@ -62,15 +63,29 @@ export default {
         nullable: true,
       },
     },
-    leftToRight: {
+    accentColor: {
       label: {
-        en: 'Left to right',
-        fr: 'Gauche vers droite',
+        en: 'Accent color',
+        fr: 'Couleur accent',
       },
-      section: 'settings',
-      type: 'OnOff',
-      bindable: true,
-      defaultValue: true,
+      section: 'style',
+      type: 'Color',
+      defaultValue: '#d04a02',
+      options: {
+        nullable: true,
+      },
+    },
+    subgraphColor: {
+      label: {
+        en: 'Subgraph color',
+        fr: 'Couleur des sous-graphes',
+      },
+      section: 'style',
+      type: 'Color',
+      defaultValue: '#f4f4f4',
+      options: {
+        nullable: true,
+      },
     },
     centerDiagram: {
       label: {

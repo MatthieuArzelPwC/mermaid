@@ -27,10 +27,12 @@ Dans WeWeb :
 4. Glisser `Diagramme Mermaid` depuis le panneau Dev sur la page.
 5. Renseigner `Code Mermaid` dans les settings du composant ou le binder a une donnee.
 
+Le bouton d'edition du champ `Code Mermaid` ouvre l'editeur de code agrandi de WeWeb. Le champ reste bindable comme une chaine de caracteres.
+
 La propriete accepte directement le contenu Mermaid :
 
 ```text
-flowchart
+flowchart LR
     A[Demande] --> B{Budget > 500k EUR ?}
     B -->|Oui| C[Comite Investissement]
     B -->|Non| D[Validation standard]
@@ -56,9 +58,11 @@ collection-item.mermaid_code
 
 Le diagramme est regenere automatiquement quand la valeur bindee change.
 
-L'option bindable `Gauche vers droite` controle l'orientation des flowcharts : activee pour `LR`, desactivee pour `TB`. Elle remplace toute direction eventuellement presente apres `flowchart` ou `graph` dans le code source.
+Le binding contient le diagramme Mermaid complet, notamment son type et sa direction (`flowchart LR`, `flowchart TB`, `graph LR`, etc.).
 
 Les couleurs acceptent les valeurs directes (`#d04a02`, `rgb(...)`) et les variables CSS retournees par les bindings WeWeb (`var(--variable, #d04a02)`). Les variables sont resolues lors du rendu du diagramme ; un changement de theme peut donc necessiter un rafraichissement de la page.
+
+`Accent color` controle le texte des titres de subgraphs. `Subgraph color` controle leur couleur de fond.
 
 ## Securite et limites
 
