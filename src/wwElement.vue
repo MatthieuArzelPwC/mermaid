@@ -60,26 +60,10 @@ export default {
       return applyDirection(normalizeCode(this.content.code), direction);
     },
     diagramColors() {
-      const backgroundColor = this.content.backgroundColor || '#ffffff';
-      const borderColor = this.content.borderColor || '#333333';
-      const textColor = this.content.textColor || '#333333';
-
       return {
-        primaryColor: backgroundColor,
-        primaryBorderColor: borderColor,
-        primaryTextColor: textColor,
-        secondaryColor: backgroundColor,
-        secondaryBorderColor: borderColor,
-        secondaryTextColor: textColor,
-        tertiaryColor: backgroundColor,
-        tertiaryBorderColor: borderColor,
-        tertiaryTextColor: textColor,
-        nodeBorder: borderColor,
-        clusterBkg: backgroundColor,
-        clusterBorder: borderColor,
-        titleColor: textColor,
-        edgeLabelBackground: backgroundColor,
-        textColor,
+        backgroundColor: this.content.backgroundColor || '#ffffff',
+        borderColor: this.content.borderColor || '#333333',
+        textColor: this.content.textColor || '#333333',
       };
     },
     shouldCenter() {
@@ -104,6 +88,50 @@ export default {
     this.renderVersion += 1;
   },
   methods: {
+    resolveColor(value, fallback) {
+      if (typeof value !== 'string' || !value.trim()) return fallback;
+
+      const variableMatch = value.trim().match(/^var\(\s*(--[^,\s)]+)\s*(?:,\s*(.+))?\)$/);
+      if (variableMatch) {
+        const variableValue = window.getComputedStyle(this.$el).getPropertyValue(variableMatch[1]).trim();
+        return this.resolveColor(variableValue || variableMatch[2], fallback);
+      }
+
+      const probe = document.createElement('span');
+      probe.style.position = 'absolute';
+      probe.style.visibility = 'hidden';
+      probe.style.color = value;
+      this.$el.appendChild(probe);
+
+      const resolvedColor = window.getComputedStyle(probe).color;
+      probe.remove();
+
+      return resolvedColor && resolvedColor !== 'canvastext' ? resolvedColor : fallback;
+    },
+    resolveDiagramColors() {
+      const backgroundColor = this.resolveColor(this.diagramColors.backgroundColor, '#ffffff');
+      const borderColor = this.resolveColor(this.diagramColors.borderColor, '#333333');
+      const textColor = this.resolveColor(this.diagramColors.textColor, '#333333');
+
+      return {
+        primaryColor: backgroundColor,
+        primaryBorderColor: borderColor,
+        primaryTextColor: textColor,
+        secondaryColor: backgroundColor,
+        secondaryBorderColor: borderColor,
+        secondaryTextColor: textColor,
+        tertiaryColor: backgroundColor,
+        tertiaryBorderColor: borderColor,
+        tertiaryTextColor: textColor,
+        nodeBorder: borderColor,
+        clusterBkg: backgroundColor,
+        clusterBorder: borderColor,
+        titleColor: textColor,
+        edgeLabelBackground: backgroundColor,
+        lineColor: textColor,
+        textColor,
+      };
+    },
     async scheduleRender() {
       const version = ++this.renderVersion;
       this.errorMessage = '';
@@ -121,7 +149,7 @@ export default {
           startOnLoad: false,
           securityLevel: 'strict',
           theme: 'base',
-          themeVariables: this.diagramColors,
+          themeVariables: this.resolveDiagramColors(),
         });
 
         const id = `mermaid-${this.uid.replace(/[^a-zA-Z0-9_-]/g, '-')}-${++diagramSequence}`;

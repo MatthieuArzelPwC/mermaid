@@ -58,6 +58,8 @@ Le diagramme est regenere automatiquement quand la valeur bindee change.
 
 L'option bindable `Gauche vers droite` controle l'orientation des flowcharts : activee pour `LR`, desactivee pour `TB`. Elle remplace toute direction eventuellement presente apres `flowchart` ou `graph` dans le code source.
 
+Les couleurs acceptent les valeurs directes (`#d04a02`, `rgb(...)`) et les variables CSS retournees par les bindings WeWeb (`var(--variable, #d04a02)`). Les variables sont resolues lors du rendu du diagramme ; un changement de theme peut donc necessiter un rafraichissement de la page.
+
 ## Securite et limites
 
 - Mermaid fonctionne avec `securityLevel: strict` afin de neutraliser le HTML et les interactions non fiables dans les donnees.
